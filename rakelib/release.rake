@@ -153,10 +153,10 @@ namespace :release do
     # Create (or update) release
     puts "Pushing release notes for tag #{version}"
     begin
-      release = client.release_for_tag("SwiftGen/#{repo_name}", version)
+      release = client.release_for_tag("azun-c/#{repo_name}", version)
       client.update_release(release.url, tag_name: version, name: version, body: body)
     rescue Octokit::NotFound
-      release = client.create_release("SwiftGen/#{repo_name}", version, name: version, body: body)
+      release = client.create_release("azun-c/#{repo_name}", version, name: version, body: body)
     end
 
     # Upload our artifacts
@@ -177,7 +177,7 @@ namespace :release do
     Utils.print_header 'Updating Homebrew Formula'
     
     tag = Utils.podspec_version(POD_NAME)
-    archive_url = "https://github.com/SwiftGen/SwiftGen/archive/#{tag}.tar.gz"
+    archive_url = "https://github.com/azun-c/SwiftGen/archive/#{tag}.tar.gz"
     digest = Digest::SHA256.hexdigest URI.open(archive_url).read
 
     formulas_dir = Bundler.with_original_env { `brew --repository homebrew/core`.chomp }
@@ -212,7 +212,7 @@ namespace :release do
       sh "git add #{formula_file}"
       sh "git commit -m 'swiftgen #{tag}'"
       # Add remote pointing to our fork, if it doesn't exist yet, then push the new branch to it before opening the PR
-      sh 'git remote add SwiftGen https://github.com/SwiftGen/homebrew-core 2>/dev/null || true'
+      sh 'git remote add SwiftGen https://github.com/azun-c/homebrew-core 2>/dev/null || true'
       sh "git push -u SwiftGen swiftgen-#{tag}"
       sh "open 'https://github.com/Homebrew/homebrew-core/compare/master...SwiftGen:swiftgen-#{tag}?expand=1'"
       sh 'git checkout master'
