@@ -1,9 +1,11 @@
 name: Archive
 
 on:
+  workflow_dispatch:
   push:
     branches: stable
   pull_request:
+
 
 jobs:
   install:
